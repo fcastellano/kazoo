@@ -20,6 +20,7 @@
 
 -export([start_link/0
         ,match_did/1
+        ,rebuild/0
         ]).
 
 -export([init/1
@@ -30,6 +31,7 @@
         ,code_change/3
         ]).
 
+-export([handle_db_update/2]).
 -export([build_trie/1, build_trie/2]).
 
 -include("hotornot.hrl").
@@ -52,6 +54,12 @@ match_did(ToDID) ->
             lager:info("candidate rates for ~s: ~s ~p", [ToDID, _Prefix, RateIds]),
             load_rates(RateIds)
     end.
+
+-spec rebuild() -> {'ok', pid()}.
+rebuild() ->
+    {'ok', {PidRef, _Ref}} = gen_server:call(?MODULE, 'rebuild'),
+    lager:debug("building trie in ~p", [PidRef]),
+    {'ok', PidRef}.
 
 -spec load_rates(ne_binaries()) -> {'ok', kz_json:objects()}.
 load_rates(RateIds) ->
@@ -78,6 +86,9 @@ handle_call({'match_did', DID}, _From, State) ->
         'error' -> {'reply', {'error', 'not_found'}, State};
         {'ok', Prefix, RateIds} -> {'reply', {'ok', {Prefix, RateIds}}, State}
     end;
+handle_call('rebuild', _From, State) ->
+    PidRef = spawn_monitor(?MODULE, 'build_trie', [self()]),
+    {'reply', {'ok', PidRef}, State};
 handle_call(_Req, _From, State) ->
     {'noreply', State}.
 
@@ -85,7 +96,11 @@ handle_call(_Req, _From, State) ->
 handle_cast({'trie', Pid, Trie}, {Pid, _Ref}) ->
     lager:debug("trie built by ~p", [Pid]),
     {'noreply', Trie};
+handle_cast({'trie', Pid, Trie}, _State) ->
+    lager:debug("trie rebuilt by ~p", [Pid]),
+    {'noreply', Trie};
 handle_cast(_Req, State) ->
+    lager:info("unhandled cast ~p", [_Req]),
     {'noreply', State}.
 
 -spec handle_info(any(), state()) -> {'noreply', state()}.
@@ -104,6 +119,12 @@ terminate(_Reason, _State) ->
 -spec code_change(any(), state(), any()) -> {'ok', state()}.
 code_change(_Vsn, State, _Extra) ->
     {'ok', State}.
+
+-spec handle_db_update(kz_json:object(), kz_proplist()) -> 'ok'.
+handle_db_update(JObj, _Props) ->
+    'true' = kapi_conf:doc_update_v(JObj),
+    {'ok', {PidRef, _Ref}} = gen_server:call(?MODULE, 'rebuild'),
+    lager:debug("ratedeck DB changed, rebuilding trie in ~p", [PidRef]).
 
 -spec build_trie(pid()) -> 'ok'.
 -spec build_trie(pid(), ne_binary()) -> 'ok'.
