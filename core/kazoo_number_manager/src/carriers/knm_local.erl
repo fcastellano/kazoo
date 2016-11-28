@@ -95,7 +95,8 @@ find_more(_, _, _, _, _Enough, Numbers) ->
 format_numbers(JObjs) ->
     Nums = [kz_doc:id(JObj) || JObj <- JObjs],
     Options = [{'auth_by', ?KNM_DEFAULT_AUTH_BY}],
-    [Number || {_Num,{'ok',Number}} <- knm_numbers:get(Nums, Options)].
+    #{ok := Numbers} = knm_numbers:get(Nums, Options),
+    Numbers.
 
 %%--------------------------------------------------------------------
 %% @public
