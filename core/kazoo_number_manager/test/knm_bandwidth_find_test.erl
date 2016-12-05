@@ -10,12 +10,7 @@
 -include_lib("eunit/include/eunit.hrl").
 -include("knm.hrl").
 
-find_test_() ->
-    [npan_tests()
-    ,area_code_tests()
-    ].
-
-npan_tests() ->
+npan_test_() ->
     Options = [{'account_id', ?RESELLER_ACCOUNT_ID}
               ,{'carriers', [<<"knm_bandwidth">>]}
               ],
@@ -27,7 +22,7 @@ npan_tests() ->
      }
     ].
 
-area_code_tests() ->
+area_code_test_() ->
     Options = [{'account_id', ?RESELLER_ACCOUNT_ID}
               ,{'carriers', [<<"knm_bandwidth">>]}
               ],
