@@ -8,8 +8,8 @@ Language: en-US
 
 This application serves `rate_req` requests.
 
-Rates stored in "ratedeck" database.  
-Each rate is separate doceument:
+Rates stored in "ratedeck" database.
+Each rate is separate document:
 ```JSON
 {
     "_id": "f36cac061205f7a0f7fde6b4d3370bf9",
@@ -27,7 +27,7 @@ Each rate is separate doceument:
     "description": "USA prefix 1",
     "direction": "outbound",
     "rate_increment": "60",
-    "rate_mnimum": "60",
+    "rate_minimum": "60",
     "rate_nocharge_time": "0",
     "options": [
         "Opt1",
@@ -38,7 +38,7 @@ Each rate is separate doceument:
 
 Schema for this documents described in [cb_rates](../../crossbar/doc/rates.md) module.
 
-## Configuration
+## Schema
 
 Key | Description | Type | Default
 --- | ----------- | ---- | -------
@@ -50,7 +50,7 @@ Key | Description | Type | Default
 `default_rate_surcharge` | Surcharge used when `rate_surcharge` is not defined in rate | `float` | `0.0`
 `default_rate_minimum` | Minimum call duration when `rate_minimum` is not defined in rate | `integer` | `60`
 `default_rate_increment` | Increment call duration when `rate_increment` is not defined in rate | `integer` | `60`
-`default_rate_nocharge_time` | No chanrge time when `rate_nocharge_time`  is not defined in rate | `integer` | `0`
+`default_rate_nocharge_time` | No change time when `rate_nocharge_time`  is not defined in rate | `integer` | `0`
 
 ## Trie
 
@@ -60,7 +60,7 @@ Key | Description | Type | Default
 
 ### direction
 
-If `direction` filter defined in `filter_list` then "Direction" value from rate request compared with `direction` value in rates. Undefined value in rate meanse "match any direction".
+If `direction` filter defined in `filter_list` then "Direction" value from rate request compared with `direction` value in rates. Undefined value in rate means "match any direction".
 
 ### route_options
 
