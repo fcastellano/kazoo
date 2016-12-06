@@ -38,21 +38,34 @@ Each rate is separate document:
 
 Schema for this documents described in [cb_rates](../../crossbar/doc/rates.md) module.
 
-## Schema
+## System Config Schema
+
+These settings are available in the `system_config/hotornot` document:
 
 Key | Description | Type | Default
 --- | ----------- | ---- | -------
-`use_trie` | Use in-memory prefix dictionary for search rates | `boolean` | `false`
-`filter_list` | List additional filters (after prefix match) | `array(string)` | `["direction", "route_options", "routes"]`
-`filter_list.[]` |  | `string` |
-`sort_by_weight` | Sort matched filters by `weight`(`true`) or by `rate_cost` (`false`) | `boolean` | `true`
 `default_rate_cost` | Cost used when `rate_cost` is not defined in rate | `float` | `0.0`
-`default_rate_surcharge` | Surcharge used when `rate_surcharge` is not defined in rate | `float` | `0.0`
-`default_rate_minimum` | Minimum call duration when `rate_minimum` is not defined in rate | `integer` | `60`
 `default_rate_increment` | Increment call duration when `rate_increment` is not defined in rate | `integer` | `60`
+`default_rate_minimum` | Minimum call duration when `rate_minimum` is not defined in rate | `integer` | `60`
 `default_rate_nocharge_time` | No change time when `rate_nocharge_time`  is not defined in rate | `integer` | `0`
+`default_rate_surcharge` | Surcharge used when `rate_surcharge` is not defined in rate | `float` | `0.0`
+`filter_list.[]` |  | `string` |
+`filter_list` | List additional filters (after prefix match) | `array(string)` | `["direction", "route_options", "routes"]`
+`sort_by_weight` | Sort matched filters by `weight`(`true`) or by `rate_cost` (`false`) | `boolean` | `true`
+`use_trie` | Use in-memory prefix dictionary for search rates | `boolean` | `false`
 
 ## Trie
+
+Hotornot has an experimental [trie](https://en.wikipedia.org/wiki/Trie) structure for storing rate prefixes in-memory. This speeds up lookups significantly (128x!) at the cost of increased memory usage (~115 bytes per prefix). Of course, if you have a large ratedeck, you can always run a VM with just hotornot running on the server.
+
+### Enabling the Trie
+
+Enable the trie by setting `use_trie` to `true` in the `system_config/hotornot` document:
+
+```shell
+sup kapps_config set_boolean hotornot use_trie true
+```
+
 
 ## Filters
 
