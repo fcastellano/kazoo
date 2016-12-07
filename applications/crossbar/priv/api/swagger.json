@@ -9216,7 +9216,7 @@
                 },
                 "sort_by_weight": {
                     "default": true,
-                    "description": "sort rates by wheight (true) or cost (false)",
+                    "description": "sort rates by weight (true) or cost (false)",
                     "type": "boolean"
                 },
                 "use_trie": {

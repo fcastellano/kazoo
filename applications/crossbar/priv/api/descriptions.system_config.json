@@ -301,7 +301,7 @@
     "hotornot.default_rate_nocharge_time": "default nocharge time for rate",
     "hotornot.default_rate_surcharge": "default surcharge amount for rate",
     "hotornot.filter_list": "List of filters for rates",
-    "hotornot.sort_by_weight": "sort rates by wheight (true) or cost (false)",
+    "hotornot.sort_by_weight": "sort rates by weight (true) or cost (false)",
     "hotornot.use_trie": "Whether to use the trie to store rates in the VM",
     "jonny5.default_inbound_trunks": "jonny5 default inbound trunks",
     "jonny5.default_twoway_trunks": "jonny5 default twoway trunks",
