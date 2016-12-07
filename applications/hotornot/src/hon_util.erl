@@ -49,8 +49,8 @@ find_candidate_rates(DID) ->
     {'error', 'did_too_short'}.
 
 -spec find_trie_rates(api_binary()) ->
-                                  {'ok', kz_json:objects()} |
-                                  {'error', atom()}.
+                             {'ok', kz_json:objects()} |
+                             {'error', atom()}.
 find_trie_rates(E164) ->
     case hon_trie:match_did(only_numeric(E164)) of
         {'ok', Result} -> {'ok', Result};
