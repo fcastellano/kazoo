@@ -27,11 +27,11 @@
 local_summary() ->
     io:format("use rates_for_did/1 to see what rates would be used for a DID").
 
--spec trie_rebuild() -> {'ok', pid()} | 'trie_not_enabled'.
+-spec trie_rebuild() -> {'ok', pid()} | {'error', any()}.
 trie_rebuild() ->
     case hon_util:use_trie() of
         'true' -> hon_trie:rebuild();
-        'false' -> 'trie_not_enabled'
+        'false' -> {'error', 'trie_not_enabled'}
     end.
 
 -spec rates_for_did(ne_binary()) -> 'ok'.

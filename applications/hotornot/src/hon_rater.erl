@@ -129,7 +129,7 @@ rate_resp(Rate, JObj) ->
     ,{<<"Prefix">>, kz_json:get_binary_value(<<"prefix">>, Rate)}
     ,{<<"Rate-Name">>, kz_json:get_binary_value(<<"rate_name">>, Rate)}
     ,{<<"Rate-Description">>, kz_json:get_binary_value(<<"description">>, Rate)}
-    ,{<<"Rate-ID">>, kz_json:get_binary_value(<<"_id">>, Rate)}
+    ,{<<"Rate-ID">>, kz_doc:id(Rate)}
     ,{<<"Base-Cost">>, kz_util:to_binary(BaseCost)}
     ,{<<"Pvt-Cost">>, kz_util:to_binary(PrivateCost)}
     ,{<<"Rate-NoCharge-Time">>, kz_json:get_integer_value(<<"rate_nocharge_time">>, Rate, ?DEFAULT_NOCHARGE)}

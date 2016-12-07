@@ -42,11 +42,22 @@ find_candidate_rates(E164)
   when byte_size(E164) > ?MIN_PREFIX_LEN ->
     case use_trie() of
         'false' -> fetch_candidate_rates(E164);
-        'true' -> hon_trie:match_did(only_numeric(E164))
+        'true' -> find_trie_rates(E164)
     end;
 find_candidate_rates(DID) ->
     lager:debug("DID ~s is too short", [DID]),
     {'error', 'did_too_short'}.
+
+-spec find_trie_rates(api_binary()) ->
+                                  {'ok', kz_json:objects()} |
+                                  {'error', atom()}.
+find_trie_rates(E164) ->
+    case hon_trie:match_did(only_numeric(E164)) of
+        {'ok', Result} -> {'ok', Result};
+        {'error', _E} ->
+            lager:warning("got error while searching did in trie, falling back to DB search"),
+            fetch_candidate_rates(E164)
+    end.
 
 -spec fetch_candidate_rates(ne_binary()) ->
                                    {'ok', kz_json:objects()} |
