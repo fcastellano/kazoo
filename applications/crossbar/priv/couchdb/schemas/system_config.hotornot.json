@@ -47,9 +47,14 @@
             "description": "sort rates by weight (true) or cost (false)",
             "type": "boolean"
         },
+        "trie_build_timeout_ms": {
+            "default": 60000,
+            "description": "build timeout (ms) for trie",
+            "type": "integer"
+        },
         "use_trie": {
             "default": false,
-            "description": "Whether to use the trie to store rates in the VM",
+            "description": "whether to use the trie to store rates in the VM",
             "type": "boolean"
         }
     },

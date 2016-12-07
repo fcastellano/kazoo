@@ -34,8 +34,9 @@
 -export([handle_db_update/2]).
 -export([build_trie/1, build_trie/2]).
 
--define(BUILD_TIMEOUT, 60000).
 -include("hotornot.hrl").
+
+-define(BUILD_TIMEOUT, kapps_config:get_integer(?APP_NAME, <<"trie_build_timeout_ms">>, ?MILLISECONDS_IN_MINUTE)).
 
 -type state() :: {trie:trie() | 'undefined', api_pid()}.
 
