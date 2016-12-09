@@ -72,8 +72,8 @@ refresh_numbers_db(<<?KNM_DB_PREFIX_ENCODED, _/binary>> = NumberDb) ->
 refresh_numbers_db(<<?KNM_DB_PREFIX, Suffix/binary>>) ->
     NumberDb = <<?KNM_DB_PREFIX_ENCODED, Suffix/binary>>,
     refresh_numbers_db(NumberDb);
-refresh_numbers_db(<<"+", Suffix/binary>>) ->
-    refresh_numbers_db(Suffix);
+refresh_numbers_db(<<"+", _/binary>> = Num) ->
+    refresh_numbers_db(knm_converters:to_db(Num));
 refresh_numbers_db(Suffix) ->
     NumberDb = <<?KNM_DB_PREFIX_ENCODED, Suffix/binary>>,
     refresh_numbers_db(NumberDb).
@@ -82,10 +82,11 @@ refresh_numbers_db(Suffix) ->
 -spec fix_accounts_numbers([ne_binary()]) -> 'ok'.
 -spec fix_account_numbers(ne_binary()) -> 'ok'.
 fix_accounts_numbers(Accounts) ->
+    _ = purge_discovery(),
     foreach_pause_in_between(?TIME_BETWEEN_ACCOUNTS_MS, fun fix_account_numbers/1, Accounts).
 
 fix_account_numbers(AccountDb = ?MATCH_ACCOUNT_ENCODED(A,B,Rest)) ->
-    kz_util:put_callid(?MODULE),
+    kz_util:put_callid('fix_account_numbers'),
     ?LOG("########## fixing [~s] ##########", [AccountDb]),
     ?LOG("[~s] getting numbers from account db", [AccountDb]),
     DisplayPNs = get_DIDs(AccountDb, <<"phone_numbers/crossbar_listing">>),
