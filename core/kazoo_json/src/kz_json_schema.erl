@@ -45,6 +45,7 @@ fload(<<_/binary>> = Schema) ->
     {'ok', kz_json:insert_value(<<"id">>, Schema, SchemaJObj)};
 fload(Schema) -> fload(kz_util:to_binary(Schema)).
 
+-spec maybe_add_ext(ne_binary()) -> ne_binary().
 maybe_add_ext(Schema) ->
     case filename:extension(Schema) of
         <<".json">> -> Schema;
